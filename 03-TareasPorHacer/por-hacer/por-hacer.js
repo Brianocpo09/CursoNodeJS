@@ -10,7 +10,7 @@ const cargarDB = () => {
     }
 }
 const guardarDB = () => {
-    let data = JSON.stringify(listadoPorHacer);
+    let data = JSON.stringify(listadoPorHacer); //Convierto en formato JSON 
     fs.writeFile('db/data.json', data, (err) => {
         if (err) {
             throw new Error('No se pudo guardar');
@@ -46,8 +46,25 @@ const actualizarTarea = (descripcion, completado = true) => {
     }
 
 }
+
+const borrarTarea = (descripcion) => {
+    cargarDB();
+    let nuevoListado = listadoPorHacer.filter(tarea => {
+        return tarea.descripcion !== descripcion;
+    })
+    if (nuevoListado.length===listadoPorHacer.length){
+        return false;
+    }else{
+        listadoPorHacer=nuevoListado;
+        guardarDB();
+        return true;
+    }
+    
+    return false;
+}
 module.exports = {
     crear,
     getListado,
-    actualizarTarea
+    actualizarTarea,
+    borrarTarea
 }
